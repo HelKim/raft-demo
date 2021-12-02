@@ -91,7 +91,6 @@ func (c *CenterForRegister) ServeHTTP(w http.ResponseWriter, req *http.Request) 
 	}
 }
 
-
 func (c *CenterForRegister) serviceRegister(w http.ResponseWriter, req *http.Request) {
 	switch req.Method {
 	case "POST":
