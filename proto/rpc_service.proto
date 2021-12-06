@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package rpc_servicepb;
+
+message GetReq {
+
+}
+
+message GetRsp {
+
+}
+
+message SetReq {
+
+}
+
+message SetRsp {
+
+}
+
+message DeleteReq {
+
+}
+
+message DeleteRsp {
+
+}
+
+
+service RpcService {
+  rpc Get(GetReq) returns (GetRsp) {}
+  rpc Set(SetReq) returns (SetRsp) {}
+  rpc Delete(DeleteReq) returns (DeleteRsp) {}
+}

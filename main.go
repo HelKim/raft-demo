@@ -20,6 +20,7 @@ var (
 	raftDataDir = flag.String("data", "data/", "raft data dir")
 	raftAddr    = flag.String("raft", "localhost:52000", "raft host:port for this node")
 	joinAddr    = flag.String("join", "", "join address")
+	clientAddr  = flag.String("service_join", "localhost:50000", "raft client port")
 )
 
 func main() {
@@ -58,10 +59,18 @@ func main() {
 		// consensus as a result of a join. All other errors indicate a problem.
 		log.Fatalf("failed to SetMeta at %s: %s", *raftId, err.Error())
 	}
-
 	h := service.New(*httpAddr, s)
 	if err := h.Start(); err != nil {
 		log.Fatalf("failed to start HTTP service: %s", err.Error())
+	}
+	b, err := json.Marshal(map[string]string{"serviceAddr": *httpAddr})
+	resp, err := http.Post(fmt.Sprintf("http://%s/service_join", *clientAddr), "application-type/json", bytes.NewReader(b))
+	if err != nil {
+		log.Fatalf("join service to client fail %s", err)
+	}
+	resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		log.Fatalf("join service to client fail %s", err)
 	}
 
 	log.Println("started successfully")
